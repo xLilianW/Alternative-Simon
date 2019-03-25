@@ -1,11 +1,12 @@
 var squares = document.querySelectorAll(".square")
-var sequence = []
 var levelDisplay = document.querySelector("#level")
-var acceptInput = false
 var btn = document.querySelector("#btn")
-var seqLength
+
+var sequence = []
+var acceptInput = false
 var waitingFor
 var level
+
 var sounds = ["Piano.ff.C4.wav", "Piano.ff.E4.wav", "Piano.ff.G4.wav",  "Piano.ff.C5.wav", "Piano.ff.C2.wav", "Piano.ff.C6.wav"]
 var sound = new Audio()
 
@@ -19,21 +20,10 @@ btn.addEventListener("click", function() {
 
 function turn() {
 	acceptInput = false
-	sequence = generateSequence(seqLength)
+	sequence.push(Math.floor(Math.random() * 4))
 	displaySequence()
 	acceptInput = true
 	}
-
-function generateSequence(n) {
-	sequence = []
-
-	for(var i = 0; i < n; i++) {
-		num = Math.floor(Math.random() * 4)
-		sequence.push(num)
-	}
-
-	return sequence
-}
 
 async function displaySequence() {
 	for(var i = 0; i < sequence.length; i++) {
@@ -61,7 +51,7 @@ function buttonEvents() {
 			this.classList.remove("highlighted")
 			
 			if(this === squares[sequence[waitingFor]]) {
-				if (waitingFor == seqLength-1) {
+				if (waitingFor == level-1) {
 					nextLevel()
 				}
 				else {
@@ -92,7 +82,6 @@ async function nextLevel() {
 	await sleep(200)
 
 	waitingFor = 0
-	seqLength++ 
 	level++
 	levelDisplay.textContent = level
 	
@@ -100,11 +89,9 @@ async function nextLevel() {
 }
 
 function reset() {
-	seqLength = 3
 	level = 1
 	waitingFor = 0
 	levelDisplay.textContent = level
-
 }
 
 function sleep(ms) {
