@@ -18,25 +18,28 @@ btn.addEventListener("click", function() {
 	turn()
 })
 
+// Execute a round
 function turn() {
 	acceptInput = false
 	sequence.push(Math.floor(Math.random() * 4))
 	displaySequence()
 	acceptInput = true
-	}
+}
 
+// Highlight the squares in the sequence
 async function displaySequence() {
 	for(var i = 0; i < sequence.length; i++) {
 		clearHighlights()
-		await sleep(500)
+		await sleep((4-Math.log(level))*100)
 		sound.src = sounds[sequence[i]]
 		sound.play()		
 		squares[sequence[i]].classList.add("highlighted")
-		await sleep(500)
+		await sleep((4-Math.log(level))*100)
 	}
 	squares[sequence[i-1]].classList.remove("highlighted")
 }
 
+// Functionality for colour buttons
 function buttonEvents() {
 	for(var i = 0; i < squares.length; i++) {
 		squares[i].addEventListener("click", async function() {
@@ -58,7 +61,7 @@ function buttonEvents() {
 					waitingFor++
 				}
 			}
-			else {
+			else { // failed
 				acceptInput = false
 				sound.src = sounds[4]
 				sound.play()				
@@ -69,12 +72,14 @@ function buttonEvents() {
 	}
 }
 
+// Remove highlighted from squares
 function clearHighlights() {
 	for(var i = 0; i < squares.length; i++) {
 		squares[i].classList.remove("highlighted")
 	}	
 }
 
+// Setup for next level
 async function nextLevel() {
 	await sleep(200)
 	sound.src = sounds[5]
@@ -88,12 +93,15 @@ async function nextLevel() {
 	turn()	
 }
 
+// Reset game
 function reset() {
 	level = 1
 	waitingFor = 0
+	sequence = []
 	levelDisplay.textContent = level
 }
 
+// Wait for some time to pass
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
